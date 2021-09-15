@@ -18,7 +18,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.org.tomtom.e_commerce.service.model.Order;
+import com.org.tomtom.e_commerce.service.model.order.Order;
 import com.org.tomtom.e_commerce.util.unique_sequence_generator.AbstractRandomLongIdEntity;
 
 @Entity

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.org.tomtom.e_commerce.service.model.PaymentType;
+import com.org.tomtom.e_commerce.service.model.order.PaymentType;
 
 @RestController
 @RequestMapping(path = "/user")

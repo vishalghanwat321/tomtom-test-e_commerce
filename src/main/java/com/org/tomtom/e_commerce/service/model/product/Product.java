@@ -27,7 +27,7 @@ public class Product extends AbstractRandomLongIdEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "product_name", nullable = false)
+	@Column(name = "product_name", nullable = false, length = 45)
 	private String productName;
 
 	@Column(name = "product_type", nullable = false, updatable = false)
