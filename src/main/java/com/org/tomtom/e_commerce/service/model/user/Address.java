@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,6 +21,10 @@ public class Address implements Serializable {
 	@Id
 	@Column(name = "ROWID")
 	private String rowid;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "address_type", nullable = false)
+	private AddressType type;
 
 	@Column(name = "line1", nullable = false)
 	private String line1;
@@ -40,6 +46,14 @@ public class Address implements Serializable {
 
 	@Column(name = "pinCode", nullable = false)
 	private String pinCode;
+
+	public AddressType getType() {
+		return type;
+	}
+
+	public void setType(AddressType type) {
+		this.type = type;
+	}
 
 	public String getLine1() {
 		return line1;
@@ -103,5 +117,11 @@ public class Address implements Serializable {
 
 	public void setRowid(String rowid) {
 		this.rowid = rowid;
+	}
+
+	enum AddressType {
+
+		OFFICE, HOME, OTHER;
+
 	}
 }

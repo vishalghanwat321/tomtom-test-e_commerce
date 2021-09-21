@@ -3,19 +3,15 @@ package com.org.tomtom.e_commerce.service.model.order;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Set;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.org.tomtom.e_commerce.service.model.cart.Cart;
 import com.org.tomtom.e_commerce.util.unique_sequence_generator.AbstractRandomLongIdEntity;
@@ -29,11 +25,9 @@ public class Order extends AbstractRandomLongIdEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ElementCollection(fetch = FetchType.LAZY, targetClass = Cart.class)
-	@CollectionTable(name = "order_item_cart", joinColumns = @JoinColumn(name = "order_item_id", referencedColumnName = "id"), uniqueConstraints = @UniqueConstraint(columnNames = {
-			"order_item_id" }))
-	@Column(name = "cart_id", nullable = false)
-	private Set<Cart> cart;
+	@OneToOne
+	@JoinColumn(name = "cart_id", unique = true)
+	private Cart cart;
 
 	@Column(name = "created_date_time", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
 	private LocalDateTime createdDateTime;
@@ -42,7 +36,7 @@ public class Order extends AbstractRandomLongIdEntity {
 	@Column(name = "payment_type", nullable = false, length = 50)
 	private PaymentType paymentType;
 
-	@Column(name = "total_bill", nullable = false, columnDefinition = "BIGINT(10)")
+	@Column(name = "total_bill", nullable = false, columnDefinition = "BIGINT")
 	private Long totalBill;
 
 	@Column(name = "delivery_date", nullable = false, columnDefinition = "DATE")
@@ -62,11 +56,11 @@ public class Order extends AbstractRandomLongIdEntity {
 		this.createdDateTime = createdDateTime;
 	}
 
-	public Set<Cart> getCart() {
+	public Cart getCart() {
 		return cart;
 	}
 
-	public void setCart(Set<Cart> cart) {
+	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
 

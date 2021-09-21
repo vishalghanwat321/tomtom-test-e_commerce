@@ -10,14 +10,11 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.org.tomtom.e_commerce.service.model.product.Product;
-import com.org.tomtom.e_commerce.service.model.user.User;
 import com.org.tomtom.e_commerce.util.unique_sequence_generator.AbstractRandomLongIdEntity;
 
 @Entity
@@ -30,16 +27,11 @@ public class Cart extends AbstractRandomLongIdEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ElementCollection(fetch = FetchType.LAZY, targetClass = Product.class)
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = Product.class)
 	@CollectionTable(name = "cart_product", joinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"), uniqueConstraints = @UniqueConstraint(columnNames = {
 			"cart_id" }))
 	@Column(name = "product_id", nullable = false)
 	private Set<Product> product;
-
-	@OneToOne
-	@JoinColumn(name = "user_id", unique = true)
-	@OrderBy("id")
-	private User user;
 
 	@Column(name = "modified_date_time", columnDefinition = "TIMESTAMP")
 	private LocalDateTime modifiedDateTime;
@@ -55,14 +47,6 @@ public class Cart extends AbstractRandomLongIdEntity {
 
 	public void setProduct(Set<Product> product) {
 		this.product = product;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public LocalDateTime getModifiedDateTime() {

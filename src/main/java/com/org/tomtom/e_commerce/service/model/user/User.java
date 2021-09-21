@@ -14,10 +14,12 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.org.tomtom.e_commerce.service.model.cart.Cart;
 import com.org.tomtom.e_commerce.service.model.order.Order;
 import com.org.tomtom.e_commerce.util.unique_sequence_generator.AbstractRandomLongIdEntity;
 
@@ -58,7 +60,7 @@ public class User extends AbstractRandomLongIdEntity {
 	@Column(name = "contact_number", unique = true, nullable = false, columnDefinition = "BIGINT(10)")
 	private Long contactNumber;
 
-	@Column(name = "passwrd", nullable = false, columnDefinition = "CHAR(128)")
+	@Column(name = "passwrd", nullable = false)
 	private String passwrd;
 
 	@Column(name = "passwrd_expiry_date_time", columnDefinition = "TIMESTAMP")
@@ -76,17 +78,13 @@ public class User extends AbstractRandomLongIdEntity {
 	@Column(name = "modified_by_id", insertable = false, length = 20)
 	private Long modifiedBy;
 
-	@Column(name = "contact_code", nullable = false, columnDefinition = "BIGINT(5)")
+	@Column(name = "contact_code", nullable = false, columnDefinition = "BIGINT")
 	private Long countryCode;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "address_type", nullable = false)
-	private AddressType type;
-
-	@ElementCollection(fetch = FetchType.LAZY, targetClass = Address.class)
-	@CollectionTable(name = "user_address", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id"),
-			@JoinColumn(name = "address_type", referencedColumnName = "address_type") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-					"user_id", "address_type" }))
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = Address.class)
+	@CollectionTable(name = "user_address", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+					"user_id" }))
 	@Column(name = "address_id", nullable = false)
 	private Set<Address> address;
 
@@ -96,11 +94,23 @@ public class User extends AbstractRandomLongIdEntity {
 	@Column(name = "order_item_id", nullable = false)
 	private Set<Order> order;
 
+	@OneToOne
+	@JoinColumn(name = "cart_id", unique = true)
+	private Cart cart;
+
 	@PrePersist
 	protected void onPrePersist() {
 		super.onPrePersist();
 		this.createdDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).toLocalDateTime();
 		this.passwrdExpiryDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).plusDays(60).toLocalDateTime();
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 	public LocalDateTime getModifiedDateTime() {
@@ -117,14 +127,6 @@ public class User extends AbstractRandomLongIdEntity {
 
 	public void setAddress(Set<Address> address) {
 		this.address = address;
-	}
-
-	public AddressType getType() {
-		return type;
-	}
-
-	public void setType(AddressType type) {
-		this.type = type;
 	}
 
 	public Title getTitle() {
@@ -247,15 +249,9 @@ public class User extends AbstractRandomLongIdEntity {
 		this.order = order;
 	}
 
-	enum AddressType {
-
-		OFFICE, HOME, OTHER;
-
-	}
-
 	enum UserGender {
 
-		MALE, FEMALE, OTHER;
+		MALE, FEMALE, KIDS;
 	}
 
 	enum Title {
