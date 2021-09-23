@@ -1,0 +1,8 @@
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('1', 'Pune', 'India', 'A', 'B', 'C', '411015', 'Maharashtra', 'HOME');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('2', 'Pune', 'India', 'D', 'E', 'F', '411015', 'Maharashtra', 'OFFICE');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('3', 'Pune', 'India', 'P', 'Q', 'R', '411015', 'Maharashtra', 'HOME');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('4', 'Pune', 'India', 'X', 'Y', 'Z', '411015', 'Maharashtra', 'OFFICE');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('5', 'Mumbai', 'India', 'A', 'B', 'C', '400015', 'Maharashtra', 'HOME');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('6', 'Mumbai', 'India', 'D', 'E', 'F', '400015', 'Maharashtra', 'OFFICE');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('7', 'Mumbai', 'India', 'P', 'Q', 'R', '400015', 'Maharashtra', 'HOME');
+INSERT INTO ADDRESS(`ROWID`, `CITY`, `COUNTRY`, `LINE1`, `LINE2`, `LINE3`, `PIN_CODE`, `STATE`, `ADDRESS_TYPE`) VALUES ('8', 'Mumbai', 'India', 'X', 'Y', 'Z', '400015', 'Maharashtra', 'OFFICE');
