@@ -2,6 +2,7 @@ package com.org.tomtom.e_commerce.service.model.product;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
@@ -48,8 +49,17 @@ public class Product extends AbstractRandomLongIdEntity {
 	@Column(name = "product_brand_name", nullable = false, updatable = false)
 	private String productBrandName;
 
+	@Column(name = "product_status", nullable = false, length = 50)
+	private String productStatus;
+
 	@Column(name = "created_date_time", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
 	private LocalDateTime createdDateTime;
+
+	@Column(name = "created_by", columnDefinition = "BIGINT")
+	private Long createdBy;
+
+	@Column(name = "modified_by", columnDefinition = "BIGINT")
+	private Long modifiedBy;
 
 	@Column(name = "modified_date_time", columnDefinition = "TIMESTAMP")
 	private LocalDateTime modifiedDateTime;
@@ -65,9 +75,35 @@ public class Product extends AbstractRandomLongIdEntity {
 	@PrePersist
 	protected void onPrePersist() {
 		super.onPrePersist();
-		this.productQuantity = 1L;
-		this.productPrice = 0L;
+		this.productStatus = ProductStatus.AVAILABLE.toString();
+		this.productQuantity = Objects.nonNull(this.productQuantity) ? this.productQuantity : 1;
+		this.productPrice = Objects.nonNull(this.productPrice) ? this.productPrice : 0;
 		this.createdDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).toLocalDateTime();
+		this.modifiedDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).toLocalDateTime();
+	}
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Long getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(Long modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(String productStatus) {
+		this.productStatus = productStatus;
 	}
 
 	public String getProductName() {

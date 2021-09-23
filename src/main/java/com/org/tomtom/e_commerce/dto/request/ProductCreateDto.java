@@ -1,19 +1,16 @@
 package com.org.tomtom.e_commerce.dto.request;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.org.tomtom.e_commerce.util.AppConstant;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
@@ -26,7 +23,6 @@ public class ProductCreateDto implements Serializable {
 
 	@JsonProperty(value = "productName", required = true)
 	@NotNull(message = "Product name cannot be null/empty")
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Invalid product name, entry does not meet criteria")
 	@Size(max = 45, message = "Product name should be less than 45")
 	private String productName;
 
@@ -59,14 +55,10 @@ public class ProductCreateDto implements Serializable {
 	@Pattern(regexp = "^[a-zA-Z]+$", message = "Invalid product brand name, entry does not meet criteria")
 	private String productBrandName;
 
-	@JsonProperty(value = "createdDateTime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConstant.LOCAL_DATE_TIME_FORMAT)
-	private LocalDateTime createdDateTime;
-
-	@JsonProperty(value = "productColor", required = true)
+	@JsonProperty(value = "productColor")
 	private Set<String> productColor;
 
-	@JsonProperty(value = "productUserGender", required = true)
+	@JsonProperty(value = "productUserGender")
 	private Set<String> productUserGender;
 
 	public String getProductName() {
@@ -123,14 +115,6 @@ public class ProductCreateDto implements Serializable {
 
 	public void setProductBrandName(String productBrandName) {
 		this.productBrandName = productBrandName;
-	}
-
-	public LocalDateTime getCreatedDateTime() {
-		return createdDateTime;
-	}
-
-	public void setCreatedDateTime(LocalDateTime createdDateTime) {
-		this.createdDateTime = createdDateTime;
 	}
 
 	public Set<String> getProductColor() {

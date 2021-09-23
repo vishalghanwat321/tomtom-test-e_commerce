@@ -33,8 +33,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.org.tomtom.e_commerce.util.AppConstant;
 import com.org.tomtom.e_commerce.util.exception.InvalidUserException;
+import com.org.tomtom.e_commerce.util.exception.InvalidUserTypeException;
 import com.org.tomtom.e_commerce.util.exception.ProductAlreadyExistsException;
 import com.org.tomtom.e_commerce.util.exception.ProductNotFoundException;
+import com.org.tomtom.e_commerce.util.exception.UserNotFoundException;
 import com.org.tomtom.e_commerce.util.exception.handler.response.ApplicationResponse;
 
 @ControllerAdvice
@@ -143,7 +145,7 @@ public class CustomRestApiExceptionHandler extends ResponseEntityExceptionHandle
 
 	// User Defined Exception
 	@ExceptionHandler({ InvalidUserException.class, IllegalArgumentException.class, BadCredentialsException.class,
-			DateTimeParseException.class })
+			DateTimeParseException.class, InvalidUserTypeException.class })
 	public ResponseEntity<Object> handleInvalidDataException(final RuntimeException ex, final WebRequest request) {
 		logger.info(ex.getClass().getName());
 
@@ -154,7 +156,7 @@ public class CustomRestApiExceptionHandler extends ResponseEntityExceptionHandle
 
 	// 404
 	// User Defined Exception
-	@ExceptionHandler({ ProductNotFoundException.class })
+	@ExceptionHandler({ ProductNotFoundException.class, UserNotFoundException.class })
 	public final ResponseEntity<Object> handleItemNotFoundException(RuntimeException ex, WebRequest request) {
 		logger.info(ex.getClass().getName());
 

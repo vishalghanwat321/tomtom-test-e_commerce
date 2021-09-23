@@ -35,6 +35,8 @@ public class ProductDto implements Serializable, Comparable<ProductDto> {
 
 	private String productBrandName;
 
+	private String productStatus;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConstant.LOCAL_DATE_TIME_FORMAT)
 	private LocalDateTime createdDateTime;
 
@@ -44,6 +46,14 @@ public class ProductDto implements Serializable, Comparable<ProductDto> {
 	private Set<String> productColor;
 
 	private Set<String> productUserGender;
+
+	public String getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(String productStatus) {
+		this.productStatus = productStatus;
+	}
 
 	public Long getId() {
 		return id;

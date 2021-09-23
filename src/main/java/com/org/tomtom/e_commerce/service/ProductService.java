@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.org.tomtom.e_commerce.repository.ProductRepository;
 import com.org.tomtom.e_commerce.service.model.product.Product;
+import com.org.tomtom.e_commerce.service.model.product.ProductStatus;
 import com.org.tomtom.e_commerce.util.AppConstant;
 import com.org.tomtom.e_commerce.util.exception.ProductNotFoundException;
 
@@ -28,6 +29,16 @@ public class ProductService {
 				.orElseThrow(() -> new ProductNotFoundException(AppConstant.ERROR_MESSAGE_PRODUCT_NOT_FOUND));
 	}
 
+	public Boolean checkDeletedProduct(Long id) throws IllegalArgumentException, ProductNotFoundException {
+		Boolean result = false;
+		Product product = this.queryProductId(id);
+		if (Objects.nonNull(product) && Objects.nonNull(product.getProductStatus())
+				&& ProductStatus.DELETED.toString().equalsIgnoreCase(product.getProductStatus())) {
+			result = true;
+		}
+		return result;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public Iterable<Product> query(Specification<Product> specification) {
@@ -38,6 +49,10 @@ public class ProductService {
 	@Transactional(readOnly = true)
 	public Page<Product> query(Specification<Product> specification, Pageable pageable) {
 		return this.productRepository.findAll(specification, pageable);
+	}
+
+	public Product save(Product product) {
+		return this.productRepository.save(product);
 	}
 
 }

@@ -42,10 +42,23 @@ public class Order extends AbstractRandomLongIdEntity {
 	@Column(name = "delivery_date", nullable = false, columnDefinition = "DATE")
 	private LocalDate deliveryDate;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "delivery_status", nullable = false, length = 50)
+	private DeliveryStatus deliveryStatus;
+
 	@PrePersist
 	protected void onPrePersist() {
 		super.onPrePersist();
+		this.deliveryStatus = DeliveryStatus.ORDERED;
 		this.createdDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).toLocalDateTime();
+	}
+
+	public DeliveryStatus getDeliveryStatus() {
+		return deliveryStatus;
+	}
+
+	public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
 	}
 
 	public LocalDateTime getCreatedDateTime() {

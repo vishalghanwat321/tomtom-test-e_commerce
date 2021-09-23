@@ -14,8 +14,12 @@ public class Product_ extends AbstractRandomLongIdEntity_ {
 
 	public static volatile SingularAttribute<Product, String> productBrandName;
 
+	public static volatile SingularAttribute<Product, String> productStatus;
+
 	public static volatile SingularAttribute<Product, Long> productPrice;
 
+	public static volatile SingularAttribute<Product, Long> productQuantity;
+	
 	public static volatile SingularAttribute<Product, String> productUserGender;
 
 	public static final String PRODUCT_TYPE = "productType";
@@ -25,5 +29,9 @@ public class Product_ extends AbstractRandomLongIdEntity_ {
 	public static final String PRODUCT_BRAND_NAME = "productBrandName";
 
 	public static final String PRODUCT_PRICE = "productPrice";
+
+	public static final String PRODUCT_STATUS = "productStatus";
+	
+	public static final String PRODUCT_QUANTITY = "productQuantity";
 
 }

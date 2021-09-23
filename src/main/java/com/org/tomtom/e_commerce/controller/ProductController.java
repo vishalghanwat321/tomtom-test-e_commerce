@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,8 @@ import com.org.tomtom.e_commerce.dto.ProductDto;
 import com.org.tomtom.e_commerce.service.ProductService;
 import com.org.tomtom.e_commerce.service.model.product.Product;
 import com.org.tomtom.e_commerce.service.model.product.ProductSpecs;
+import com.org.tomtom.e_commerce.service.model.product.ProductStatus;
+import com.org.tomtom.e_commerce.util.AppConstant;
 import com.org.tomtom.e_commerce.util.builder.SpecificationsBuilder;
 import com.org.tomtom.e_commerce.util.exception.ProductNotFoundException;
 import com.org.tomtom.e_commerce.util.mapper.ProductToProductDtoMapper;
@@ -46,7 +49,7 @@ public class ProductController {
 	@Autowired
 	private ProductToProductDtoMapper productToProductDtoMapper;
 
-	@GetMapping(path = "/{productId:[0-9]+}")
+	@GetMapping(path = "/{productId:[0-9]+}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ProductDto getProductDetailsById(@PathVariable(value = "productId") Long productId)
 			throws IllegalArgumentException, ProductNotFoundException {
@@ -54,13 +57,17 @@ public class ProductController {
 		LOGGER.info("ProductController ::  getProductDetailsById execution started");
 		try {
 			Product product = this.productService.queryProductId(productId);
+			if (Objects.nonNull(product) && Objects.nonNull(product.getProductStatus())
+					&& ProductStatus.DELETED.toString().equalsIgnoreCase(product.getProductStatus())) {
+				throw new ProductNotFoundException(AppConstant.ERROR_MESSAGE_PRODUCT_NOT_FOUND);
+			}
 			return this.productToProductDtoMapper.convert(product);
 		} finally {
 			LOGGER.info("ProductController ::  getProductDetailsById execution completed");
 		}
 	}
 
-	@GetMapping(path = "/list")
+	@GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Iterable<ProductDto> getAllProductDetails(@RequestParam(required = false, value = "page") Integer page,
 			@RequestParam(required = false, value = "page_size") Integer pageSize,
@@ -69,7 +76,7 @@ public class ProductController {
 			@RequestParam(required = false, value = "product_types[]") Set<String> productTypes,
 			@RequestParam(required = false, value = "product_brand_names[]") Set<String> productBrandNames,
 			@RequestParam(required = false, value = "product_sub_types[]") Set<String> productSubTypes,
-			@RequestParam(required = false, value = "min_price", defaultValue = "0") Long minPrice,
+			@RequestParam(required = false, value = "min_price", defaultValue = "1") Long minPrice,
 			@RequestParam(required = false, value = "max_price", defaultValue = "10000000") Long maxPrice,
 			@RequestParam(required = false, value = "ids[]") Set<Long> ids) throws IllegalArgumentException {
 
@@ -81,13 +88,15 @@ public class ProductController {
 			specificationsBuilder.addSpecification(ProductSpecs.filterByProductTypes(productTypes));
 			specificationsBuilder.addSpecification(ProductSpecs.filterByProductBrandName(productBrandNames));
 			specificationsBuilder.addSpecification(ProductSpecs.filterByProductSubTypes(productSubTypes));
+			specificationsBuilder.addSpecification(ProductSpecs.filterByProductNotDeleted());
+			specificationsBuilder.addSpecification(ProductSpecs.filterByProductQuantityMoreThanOne());
 			specificationsBuilder.addSpecification(ProductSpecs.filterByPriceRange(minPrice, maxPrice));
 
 			if (Objects.nonNull(page) && page >= 0 && Objects.nonNull(pageSize) && pageSize > 0) {
 				PageRequest pageRequest = PageRequest.of(page, pageSize, sortAscending ? Direction.ASC : Direction.DESC,
 						Optional.ofNullable(sortProperties)
 								.map(items -> Arrays.stream(items).filter(StringUtils::isNotBlank))
-								.orElse(Stream.of("createdDateTime")).toArray(String[]::new));
+								.orElse(Stream.of("id")).toArray(String[]::new));
 				Page<Product> products = this.productService.query(specificationsBuilder.build(), pageRequest);
 				return products.map(this.productToProductDtoMapper::convert);
 			}

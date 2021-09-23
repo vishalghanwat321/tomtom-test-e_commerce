@@ -35,7 +35,7 @@ public class ProductToProductDtoMapper {
 	private void initializeTypeMaps() {
 		LOGGER.info("initializing mapper to map Product to ProductDto...");
 
-		Converter<Set<String>, Set<String>> converterApplicationsToIDs = ctx -> Objects.isNull(ctx.getSource()) ? null
+		Converter<Set<String>, Set<String>> converterToSet = ctx -> Objects.isNull(ctx.getSource()) ? null
 				: ctx.getSource().stream().filter(Objects::nonNull).collect(Collectors.toSet());
 
 		this.typeMapDTO = this.modelMapper.createTypeMap(Product.class, ProductDto.class)
@@ -49,10 +49,10 @@ public class ProductToProductDtoMapper {
 				.addMapping(Product::getProductBrandName, ProductDto::setProductBrandName)
 				.addMapping(Product::getCreatedDateTime, ProductDto::setCreatedDateTime)
 				.addMapping(Product::getModifiedDateTime, ProductDto::setModifiedDateTime)
-				.addMapping(Product::getProductQuantity, ProductDto::setProductQuantity)
-				.addMappings(mapper -> mapper.using(converterApplicationsToIDs).map(Product::getProductColor,
+				.addMapping(Product::getProductStatus, ProductDto::setProductStatus)
+				.addMappings(mapper -> mapper.using(converterToSet).map(Product::getProductColor,
 						ProductDto::setProductColor))
-				.addMappings(mapper -> mapper.using(converterApplicationsToIDs).map(Product::getProductUserGender,
+				.addMappings(mapper -> mapper.using(converterToSet).map(Product::getProductUserGender,
 						ProductDto::setProductUserGender));
 	}
 

@@ -51,6 +51,10 @@ public class User extends AbstractRandomLongIdEntity {
 	@Column(name = "user_type", nullable = false, length = 25)
 	private UserType userType;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "user_status", nullable = false, length = 25)
+	private UserStatus userStatus;
+
 	@Column(name = "email", unique = true, nullable = false, length = 50)
 	private String email;
 
@@ -101,8 +105,17 @@ public class User extends AbstractRandomLongIdEntity {
 	@PrePersist
 	protected void onPrePersist() {
 		super.onPrePersist();
+		this.userStatus = UserStatus.ACTIVE;
 		this.createdDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).toLocalDateTime();
 		this.passwrdExpiryDateTime = LocalDateTime.now().atOffset(ZoneOffset.UTC).plusDays(60).toLocalDateTime();
+	}
+
+	public UserStatus getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(UserStatus userStatus) {
+		this.userStatus = userStatus;
 	}
 
 	public Cart getCart() {
@@ -247,21 +260,6 @@ public class User extends AbstractRandomLongIdEntity {
 
 	public void setOrder(Set<Order> order) {
 		this.order = order;
-	}
-
-	enum UserGender {
-
-		MALE, FEMALE, KIDS;
-	}
-
-	enum Title {
-
-		MR, MISS, DR, MRS, OTHER;
-
-	}
-
-	enum UserType {
-		BUYER, SELLER;
 	}
 
 }

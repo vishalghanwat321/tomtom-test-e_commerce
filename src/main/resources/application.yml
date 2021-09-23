@@ -32,7 +32,13 @@ spring:
       enabled: true
   main:
     web-application-type: servlet
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/dml/address.sql,classpath:sql/dml/cart.sql,classpath:sql/dml/user.sql,classpath:sql/dml/user_address.sql,classpath:sql/dml/product.sql,classpath:sql/dml/product_color.sql,classpath:sql/dml/product_user_gender.sql
+      platform: h2
   jpa:
+    defer-datasource-initialization: true
     show-sql: false
     hibernate:
       ddl-auto: create-drop
