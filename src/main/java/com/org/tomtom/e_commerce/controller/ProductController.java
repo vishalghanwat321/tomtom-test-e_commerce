@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +48,7 @@ public class ProductController {
 	@Autowired
 	private ProductToProductDtoMapper productToProductDtoMapper;
 
-	@GetMapping(path = "/{productId:[0-9]+}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{productId:[0-9]+}")
 	@ResponseBody
 	public ProductDto getProductDetailsById(@PathVariable(value = "productId") Long productId)
 			throws IllegalArgumentException, ProductNotFoundException {
@@ -67,7 +66,7 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/list")
 	@ResponseBody
 	public Iterable<ProductDto> getAllProductDetails(@RequestParam(required = false, value = "page") Integer page,
 			@RequestParam(required = false, value = "page_size") Integer pageSize,

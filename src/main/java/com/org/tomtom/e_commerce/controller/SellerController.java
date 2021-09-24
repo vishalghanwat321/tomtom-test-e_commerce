@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.org.tomtom.e_commerce.dto.ProductDto;
 import com.org.tomtom.e_commerce.dto.request.ProductCreateDto;
+import com.org.tomtom.e_commerce.dto.request.ProductUpdateDto;
 import com.org.tomtom.e_commerce.service.SellerService;
 import com.org.tomtom.e_commerce.util.AppConstant;
 import com.org.tomtom.e_commerce.util.exception.InternalApplicationException;
@@ -61,18 +62,18 @@ public class SellerController {
 	}
 
 	@PutMapping(path = "/{sellerId:[0-9]+}/product/{productId:[0-9]+}")
-	public ProductDto modifyProduct(@PathVariable("sellerId") Long sellerId,
-			@PathVariable("productId") Long productId) {
+	public Object modifyProduct(@PathVariable("sellerId") Long sellerId, @PathVariable("productId") Long productId,
+			@RequestBody @Valid ProductUpdateDto productUpdateDto) {
 		LOGGER.info("SellerController ::  modifyProduct execution started");
 		try {
 			if (this.sellerService.validateActiveAndValidSeller(sellerId)) {
+				return "Functionality yet to implement";
 			} else {
 				throw new UserNotFoundException(AppConstant.ERROR_MESSAGE_USER_NOT_FOUND);
 			}
 		} finally {
 			LOGGER.info("SellerController ::  modifyProduct execution completed");
 		}
-		return null;
 	}
 
 	@DeleteMapping(path = "/{sellerId:[0-9]+}/product/{productId:[0-9]+}")
